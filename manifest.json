@@ -1,0 +1,9 @@
+{
+  "name": "T.S. Kalender",
+  "short_name": "TS Kalender",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111827",
+  "lang": "de"
+}
