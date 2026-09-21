@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="description" content="T.S. Serviceleistungen – persönlicher Kalender">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css?v=clean1">
+<title>T.S. Kalender</title>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo">TS</span><div><b>T.S. Kalender</b><small>Serviceplanung</small></div></div>
+  <button id="logoutBtn" class="ghost hidden">Abmelden</button>
+</header>
+
+<main>
+<section id="loginPanel" class="panel login">
+  <small>PRIVATER KALENDER</small>
+  <h1>Meine Termine</h1>
+  <p>Nur für die persönliche Terminplanung.</p>
+  <form id="loginForm">
+    <label>E-Mail<input id="email" type="email" required autocomplete="username"></label>
+    <label>Passwort<input id="password" type="password" required autocomplete="current-password"></label>
+    <button class="primary">Anmelden</button>
+    <p id="loginMsg" class="notice hidden"></p>
+  </form>
+</section>
+
+<section id="appPanel" class="hidden">
+  <div class="toolbar panel">
+    <div>
+      <small>KALENDER</small>
+      <h1 id="monthTitle">—</h1>
+    </div>
+    <div class="toolbar-actions">
+      <button id="prevBtn" type="button">‹</button>
+      <button id="todayBtn" type="button">Heute</button>
+      <button id="nextBtn" type="button">›</button>
+      <button id="addBtn" class="primary" type="button">+ Termin</button>
+    </div>
+  </div>
+
+  <div class="view-tabs panel">
+    <button data-view="day" class="active">Tag</button>
+    <button data-view="week">Woche</button>
+    <button data-view="month">Monat</button>
+  </div>
+
+  <div id="calendar" class="panel calendar"></div>
+
+  <div class="legend panel">
+    <span><i class="dot garden"></i> Gartenarbeiten</span>
+    <span><i class="dot vehicle"></i> Fahrzeugpflege</span>
+    <span><i class="dot neutral"></i> Sonstige / privat</span>
+    <span><i class="dot shift"></i> 24h-Schicht</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><b>Hinweis</b></div>
+    <p class="muted">Eigene Termine und 24h-Schichten blockieren künftig ebenfalls Kundenbuchungen.</p>
+  </div>
+</section>
+</main>
+
+<div id="modal" class="modal hidden">
+ <div class="modal-card">
+  <div class="modal-head"><h2 id="modalTitle">Neuer Termin</h2><button id="closeBtn">×</button></div>
+  <form id="eventForm">
+   <label>Terminart
+    <select id="eventType">
+      <option value="private">🔒 Privat / blockiert</option>
+      <option value="shift">🚒 24h-Schicht</option>
+      <option value="garden">🌳 Gartenarbeiten</option>
+      <option value="vehicle">🚗 Fahrzeugpflege</option>
+      <option value="other">📝 Sonstiger Termin</option>
+    </select>
+   </label>
+   <label>Titel<input id="eventTitle" required placeholder="z. B. 24h-Schicht"></label>
+   <div class="grid2">
+    <label>Startdatum<input id="startDate" type="date" required></label>
+    <label>Startzeit<input id="startTime" type="time" required></label>
+   </div>
+   <div class="grid2">
+    <label>Enddatum<input id="endDate" type="date" required></label>
+    <label>Endzeit<input id="endTime" type="time" required></label>
+   </div>
+   <label>Notiz<textarea id="eventNotes" rows="3"></textarea></label>
+   <div class="form-actions">
+    <button type="button" id="cancelBtn">Abbrechen</button>
+    <button class="primary">Speichern</button>
+   </div>
+   <p id="formMsg" class="notice hidden"></p>
+  </form>
+ </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js?v=clean1"></script>
+</body>
+</html>
