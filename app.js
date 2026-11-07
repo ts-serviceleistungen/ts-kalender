@@ -13,6 +13,7 @@ const typeClass=e=>{
   if(e.event_type==='garden') return 'garden';
   if(e.event_type==='vehicle') return 'vehicle';
   if(e.event_type==='shift') return 'shift';
+  if(e.event_type==='vacation') return 'vacation';
   return 'neutral';
 };
 
@@ -177,7 +178,8 @@ async function load(){
     const t=String(x.event_type||'').toLowerCase();
     let type='other';
 
-    if(t.includes('24') || t.includes('schicht')) type='shift';
+    if(t.includes('urlaub')) type='vacation';
+    else if(t.includes('24') || t.includes('schicht')) type='shift';
     else if(t.includes('garten')) type='garden';
     else if(t.includes('fahrzeug')) type='vehicle';
     else if(t.includes('privat') || t.includes('sonstig')) type='private';
@@ -286,12 +288,13 @@ function render(){
 function eventHtml(e){
   const s=fmtTime(e.start);
   const en=fmtTime(e.end);
+  const timeLabel=e.event_type==='vacation'?'Ganztägig':`${s}–${en}`;
   const deleteButton=e.source==='personal'
     ? `<button type="button" class="event-delete" data-delete-personal="${esc(e.sourceId)}" title="Termin löschen" aria-label="Termin löschen">×</button>`
     : '';
   const subtitle=e.subtitle ? `<small>${esc(e.subtitle)}</small>` : '';
   return `<div class="event ${typeClass(e)}" data-open-event="${esc(e.id)}" role="button" tabindex="0">
-    <div class="event-content"><b>${esc(e.displayTitle||e.title)}</b>${subtitle}<br>${s}–${en}</div>
+    <div class="event-content"><b>${esc(e.displayTitle||e.title)}</b>${subtitle}<br>${timeLabel}</div>
     ${deleteButton}
   </div>`;
 }
@@ -460,12 +463,12 @@ function openEventDetails(eventId){
   modal.innerHTML=`
     <div class="modal-card event-detail-card">
       <div class="modal-head">
-        <h2>${esc(event.event_type==='shift'?'24h-Schicht':(event.displayTitle||event.title||'Termin'))}</h2>
+        <h2>${esc(event.event_type==='shift'?'24h-Schicht':event.event_type==='vacation'?'Urlaub':(event.displayTitle||event.title||'Termin'))}</h2>
         <button type="button" id="detailClose">×</button>
       </div>
 
       <div class="notice">
-        <b>${esc(event.event_type==='shift'?'24h-Schicht':(event.title||'Termin'))}</b><br>
+        <b>${esc(event.event_type==='shift'?'24h-Schicht':event.event_type==='vacation'?'Urlaub':(event.title||'Termin'))}</b><br>
         ${esc(fmtDate(event.start))} · ${esc(fmtTime(event.start))}
         – ${esc(fmtDate(event.end))} · ${esc(fmtTime(event.end))}
       </div>
@@ -530,6 +533,13 @@ $('eventType').onchange=()=>{
     $('endTime').value=new Intl.DateTimeFormat('de-DE',{
       hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Europe/Berlin'
     }).format(d);
+  } else if($('eventType').value==='vacation'){
+    $('eventTitle').value='Urlaub';
+    const d=new Date(`${$('startDate').value}T00:00:00`);
+    $('startTime').value='00:00';
+    d.setDate(d.getDate()+1);
+    $('endDate').value=berlinDateInput(d);
+    $('endTime').value='00:00';
   }
 };
 
@@ -556,7 +566,9 @@ $('eventForm').addEventListener('submit',async e=>{
     title:$('eventTitle').value,
     event_type:$('eventType').value,
     start_time:start.toISOString(),
-    end_time:end.toISOString()
+    end_time:end.toISOString(),
+    blocks_customer_bookings:$('eventType').value==='vacation',
+    source:$('eventType').value==='vacation'?'vacation':null
   });
 
   if(error){
