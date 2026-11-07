@@ -537,9 +537,8 @@ $('eventType').onchange=()=>{
     $('eventTitle').value='Urlaub';
     const d=new Date(`${$('startDate').value}T00:00:00`);
     $('startTime').value='00:00';
-    d.setDate(d.getDate()+1);
-    $('endDate').value=berlinDateInput(d);
-    $('endTime').value='00:00';
+    $('endDate').value=$('startDate').value;
+    $('endTime').value='23:59';
   }
 };
 
