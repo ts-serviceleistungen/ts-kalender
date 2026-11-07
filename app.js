@@ -566,7 +566,7 @@ $('eventForm').addEventListener('submit',async e=>{
     event_type:$('eventType').value==='vacation'?'Urlaub':$('eventType').value,
     start_time:start.toISOString(),
     end_time:end.toISOString(),
-    blocks_customer_bookings:$('eventType').value==='vacation',
+    blocks_customer_bookings:false,
     source:$('eventType').value==='vacation'?'vacation':null
   });
 
