@@ -332,7 +332,7 @@ function renderWeek(){
       const d=new Date(ws);
       d.setDate(ws.getDate()+i);
       h+=`<div class="week-day">
-        ${eventsOn(d).filter(e=>new Date(e.start).getHours()===hour).map(eventHtml).join('')}
+        ${eventsOn(d).filter(e=>e.event_type==='vacation' ? hour===0 : new Date(e.start).getHours()===hour).map(eventHtml).join('')}
       </div>`;
     }
   }
