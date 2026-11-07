@@ -564,7 +564,7 @@ $('eventForm').addEventListener('submit',async e=>{
   // aus der der Kalender seine persönlichen Termine lädt.
   const {error}=await db.from('personal_calendar_events').insert({
     title:$('eventTitle').value,
-    event_type:$('eventType').value,
+    event_type:$('eventType').value==='vacation'?'Urlaub':$('eventType').value,
     start_time:start.toISOString(),
     end_time:end.toISOString(),
     blocks_customer_bookings:$('eventType').value==='vacation',
