@@ -566,8 +566,9 @@ $('eventForm').addEventListener('submit',async e=>{
     event_type:$('eventType').value==='vacation'?'Urlaub':$('eventType').value,
     start_time:start.toISOString(),
     end_time:end.toISOString(),
+    notes:$('eventNotes').value.trim() || null,
     blocks_customer_bookings:false,
-    source:$('eventType').value==='vacation'?'vacation':null
+    source:$('eventType').value==='vacation'?'vacation':'manual'
   });
 
   if(error){
